@@ -1,11 +1,12 @@
 # CWA 天氣預報 API 服務
 
-這是一個使用 Node.js + Express 開發的天氣預報 API 服務，串接中央氣象署（CWA）開放資料平台，提供高雄市天氣預報資料。
+這是一個使用 Node.js + Express 開發的天氣預報 API 服務，串接中央氣象署（CWA）開放資料平台，提供台灣各縣市天氣預報資料。
 
 ## 功能特色
 
 - ✅ 串接 CWA 氣象資料開放平台
-- ✅ 取得高雄市 36 小時天氣預報
+- ✅ 取得台灣各縣市 36 小時天氣預報
+- ✅ 支援英文 ID 或中文城市名稱查詢
 - ✅ 環境變數管理
 - ✅ RESTful API 設計
 - ✅ CORS 支援
@@ -72,8 +73,17 @@ GET /
 {
   "message": "歡迎使用 CWA 天氣預報 API",
   "endpoints": {
-    "kaohsiung": "/api/weather/kaohsiung",
+    "weatherById": "/api/weather/:id",
+    "cities": "/api/cities",
     "health": "/api/health"
+  },
+  "usage": {
+    "description": "使用城市 ID 或中文名稱取得天氣預報",
+    "examples": [
+      "/api/weather/taipei",
+      "/api/weather/kaohsiung",
+      "/api/weather/臺北市"
+    ]
   }
 }
 ```
@@ -93,11 +103,39 @@ GET /api/health
 }
 ```
 
-### 3. 取得高雄天氣預報
+### 3. 取得支援的城市列表
 
 ```
-GET /api/weather/kaohsiung
+GET /api/cities
 ```
+
+回應範例：
+
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "taipei", "name": "臺北市" },
+    { "id": "new-taipei", "name": "新北市" },
+    { "id": "taoyuan", "name": "桃園市" },
+    { "id": "taichung", "name": "臺中市" },
+    { "id": "tainan", "name": "臺南市" },
+    { "id": "kaohsiung", "name": "高雄市" }
+  ]
+}
+```
+
+### 4. 取得指定城市天氣預報
+
+```
+GET /api/weather/:id
+```
+
+支援使用英文 ID 或中文城市名稱：
+
+- `/api/weather/taipei` - 使用英文 ID
+- `/api/weather/kaohsiung` - 使用英文 ID
+- `/api/weather/臺北市` - 使用中文名稱
 
 回應範例：
 
@@ -122,6 +160,33 @@ GET /api/weather/kaohsiung
   }
 }
 ```
+
+#### 支援的城市 ID
+
+| 英文 ID | 中文名稱 |
+|---------|----------|
+| taipei | 臺北市 |
+| new-taipei | 新北市 |
+| taoyuan | 桃園市 |
+| taichung | 臺中市 |
+| tainan | 臺南市 |
+| kaohsiung | 高雄市 |
+| keelung | 基隆市 |
+| hsinchu | 新竹市 |
+| hsinchu-county | 新竹縣 |
+| chiayi | 嘉義市 |
+| chiayi-county | 嘉義縣 |
+| miaoli | 苗栗縣 |
+| changhua | 彰化縣 |
+| nantou | 南投縣 |
+| yunlin | 雲林縣 |
+| pingtung | 屏東縣 |
+| yilan | 宜蘭縣 |
+| hualien | 花蓮縣 |
+| taitung | 臺東縣 |
+| penghu | 澎湖縣 |
+| kinmen | 金門縣 |
+| lienchiang | 連江縣 |
 
 ## 專案結構
 

@@ -137,17 +137,13 @@ GET /api/weather/:id
 - `/api/weather/kaohsiung` - 使用英文 ID
 - `/api/weather/臺北市` - 使用中文名稱
 
-```
-GET /api/weather/kaohsiung
-```
-
 回應範例：
 
 ```json
 {
   "success": true,
   "data": {
-    "city": "臺北市",
+    "city": "高雄市",
     "updateTime": "資料更新時間說明",
     "forecasts": [
       {

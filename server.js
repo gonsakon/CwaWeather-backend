@@ -58,6 +58,18 @@ app.use(express.urlencoded({ extended: true }));
  */
 const getCityWeather = async (req, res) => {
   try {
+    const cityId = req.params.id;
+    
+    // 驗證輸入參數：只允許英文字母、數字、連字符、中文字元
+    const validPattern = /^[\u4e00-\u9fa5a-zA-Z0-9-]+$/;
+    if (!cityId || !validPattern.test(cityId)) {
+      return res.status(400).json({
+        error: "無效的城市參數",
+        message: "城市 ID 只能包含英文字母、數字、連字符或中文字元",
+        supportedCities: getSupportedCities(),
+      });
+    }
+    
     // 檢查是否有設定 API Key
     if (!CWA_API_KEY) {
       return res.status(500).json({
@@ -65,8 +77,6 @@ const getCityWeather = async (req, res) => {
         message: "請在 .env 檔案中設定 CWA_API_KEY",
       });
     }
-
-    const cityId = req.params.id;
     
     // 嘗試從映射表取得 locationName，若找不到則直接使用參數值
     // 支援兩種方式: 1. 使用英文 ID (如 kaohsiung) 2. 直接使用中文城市名稱 (如 高雄市)
@@ -79,7 +89,7 @@ const getCityWeather = async (req, res) => {
       {
         params: {
           Authorization: CWA_API_KEY,
-          locationName: locationName,
+          locationName,
         },
       }
     );
